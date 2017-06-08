@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>phene.co</title>
+	<link rel="stylesheet" href="assets/style.css">
+	<link rel="shortcut icon" type="image/png" href="assets/fav.png"/>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,900,900i" rel="stylesheet">
+</head>
+<body>
+	<div id="nav">
+		<a href="http://phene.co"><div
+			style="left:0px;top:133px;"
+			id="planet"
+			mass="1e3"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204.61 204.61"><title>phene.co</title><defs><style>.cls-1{fill:none;stroke:#A9C8F4;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}</style></defs><path class="cls-1" d="M172.88,76.6a75,75,0,1,0-17.35,78.94A74.69,74.69,0,0,0,172.88,76.6Z" transform="translate(-0.2 -0.2)"/><path class="cls-1" d="M128.4,32.12c29-19.5,53.17-27.32,62.48-18s1.49,33.53-18,62.48C161.74,93.15,146.78,111.26,129,129S93.15,161.74,76.6,172.88c-29,19.5-53.17,27.32-62.48,18s-1.49-33.53,18-62.48" transform="translate(-0.2 -0.2)"/></svg>
+		</div></a>
+		<a onclick="scrollToAnchor('home')"><div
+			style="left:37px;top:0px;"
+			class="moon"
+			mass="100"
+			velocity="342.99717028501766"
+			direction="0"
+		><div></div></div></a>
+		<a onclick="scrollToAnchor('graphene')"><div
+			style="left:37px;top:50px;"
+			class="moon"
+			mass="100"
+			velocity="408.248290463863"
+			direction="0"
+		><div></div></div></a>
+		<a onclick="scrollToAnchor('libraries')"><div
+			style="left:37px;top:290px;"
+			class="moon"
+			mass="100"
+			velocity="408.248290463863"
+			direction="3.141592653589793"
+		><div></div></div></a>
+		<a onclick="scrollToAnchor('people')"><div
+			style="left:37px;top:340px;"
+			class="moon"
+			mass="100"
+			velocity="342.99717028501766"
+			direction="3.141592653589793"
+		><div></div></div></a>
+	</div>
+	<div style="position:fixed;top:0;left:0;width:100%;height:100vh;z-index:10;" id="map"></div>
+	<div id="content">
+		<div class="section" id="home">
+			<div class="content">
+				<div id="title">
+					<h1>phene.co</h1>
+					<p>
+						a graphic design and web development firm in the Minneapolis, MN metro area.
+						developers of the <a onclick="scrollToAnchor('graphene')">Graphene</a> social network.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="section" id="graphene">
+			<div class="content">
+
+			</div>
+		</div>
+		<div class="section" id="libraries">
+			<div class="content">
+
+			</div>
+		</div>
+		<div class="section" id="people">
+			<div class="content">
+
+			</div>
+		</div>
+	</div>
+	<script>
+		window.rate = 0.01;
+		(window.run = function(){
+			var moonsE			= document.getElementsByClassName('moon'),
+				planetE			= document.getElementById('planet'),
+				pRect			= planetE.getBoundingClientRect();
+			window.moons		= [];
+			window.planet		= {};
+			window.G			= -2e4;
+			planet.element		= planetE;
+			planet.mass			= +planetE.attributes.mass.value;
+			planet.x			= pRect.left + (pRect.width / 2);
+			planet.y			= pRect.top + (pRect.height / 2);
+			planet.xOffset		= (pRect.width / 2) + planetE.parentNode.parentNode.getBoundingClientRect().left;
+			planet.yOffset		= (pRect.height / 2) + planetE.parentNode.parentNode.getBoundingClientRect().top;
+			for(var i = 0; i < moonsE.length; i++) moons[i] = makeMoon(moonsE[i]);
+			(function gravity(){
+				if(!window.frozen) requestAnimationFrame(gravity);
+				for(var i = 0; i < moons.length; i++){
+					if(window.toFreeze && Math.sqrt(Math.pow(moons[i].x - moons[i].x0,2) + Math.pow(moons[i].y - moons[i].y0,2)) < 20){
+						moons[i].snapTo(moons[i].x0,moons[i].y0);
+						moons[i].frozen = true;
+
+						var all = true;
+						for(var j = 0; j < moons.length; j++) all = all && moons[j].frozen;
+						window.frozen = all;
+
+						continue;
+					}
+
+					var r		= Math.sqrt(Math.pow(moons[i].x - moons[i].influence.x,2) + Math.pow(moons[i].y - moons[i].influence.y,2)),
+						dt		= window.rate,
+						gDir	= Math.atan((moons[i].y - moons[i].influence.y)/(moons[i].x - moons[i].influence.x)) +
+									((moons[i].y - moons[i].influence.y < 0 && moons[i].x - moons[i].influence.x < 0) || (moons[i].y - moons[i].influence.y > 0 && moons[i].x - moons[i].influence.x < 0)
+										? Math.PI
+										: 0
+									),
+						gX		= Math.cos(gDir)*((G*moons[i].influence.mass)/Math.pow(r,2)),
+						gY		= Math.sin(gDir)*((G*moons[i].influence.mass)/Math.pow(r,2)),
+						vX		= moons[i].velocity*Math.cos(moons[i].direction),
+						vY		= moons[i].velocity*Math.sin(moons[i].direction);
+
+					moons[i].velocity = Math.sqrt(Math.pow(vX + gX*dt,2) + Math.pow(vY + gY*dt,2));
+					moons[i].direction = Math.atan((vY + gY*dt) / (vX + gX*dt)) - ((vY + gY*dt < 0 && vX + gX*dt < 0) || (vY + gY*dt > 0 && vX + gX*dt < 0)?Math.PI:0);
+
+					vX = vX + gX*dt;
+					vY = vY + gY*dt;
+
+					moons[i].x += vX*dt;
+					moons[i].y += vY*dt;
+
+					//document.getElementById('nav').insertAdjacentHTML('beforeend','<div style="position:fixed;width:1px;height:1px;background:#A9C8F4;top:' + moons[i].y + 'px;left:' + moons[i].x + 'px;"></div>');
+
+					moons[i].t = +new Date / 1e3;
+					moons[i].element.style.left = (moons[i].x - moons[i].xOffset) + "px";
+					moons[i].element.style.top = (moons[i].y - moons[i].yOffset) + "px";
+				}
+			})();
+		})();
+		function makeMoon(e){
+			var ret 			= {};
+			ret.element			= e;
+			ret.mass			= +e.attributes.mass.value;
+			var r				= e.getBoundingClientRect();
+			ret.x				= r.left + (r.width / 2);
+			ret.y				= r.top + (r.height / 2);
+			ret.x0				= ret.x;
+			ret.y0				= ret.y;
+			ret.xOffset			= (r.width / 2) + e.parentNode.parentNode.getBoundingClientRect().left;
+			ret.yOffset			= (r.height / 2) + e.parentNode.parentNode.getBoundingClientRect().top;
+			ret.velocity		= +e.attributes.velocity.value || 0;
+			ret.direction		= +e.attributes.direction.value || 0;
+			ret.influence		= planet;
+			ret.t				= +new Date / 1e3;
+			ret.r0				= Math.sqrt(Math.pow(ret.x - ret.influence.x,2) + Math.pow(ret.y - ret.influence.y,2));
+			ret.frozen			= false;
+			ret.snapTo			= function(x,y){
+				this.x			= x;
+				this.y			= y;
+				this.velocity	= 0;
+				this.direction	= 0;
+				this.element.style.left	= (this.x - this.xOffset) + "px";
+				this.element.style.top	= (this.y - this.yOffset) + "px";
+			}
+			return ret;
+		}
+		function stopGravity(){
+			document.getElementById('nav').style.left = '30px';
+			window.rate		= 0.04;
+			window.toFreeze	= true;
+		}
+		function startGravity(){
+			for(var i = 0; i < moons.length; i++) moons[i].snapTo(moons[i].x0,moons[i].y0);
+			document.getElementById('nav').style.left = 'calc(50vw - 350px)';
+			window.rate		= 0.01;
+			window.frozen	= false;
+			window.toFreeze	= false;
+			run();
+		}
+		function smoothScrollBy(x,y,speed){
+			var speed = speed || 25,
+				xit = ~~(x / speed),
+				yit = ~~(y / speed),
+				xJumps = ~~Math.abs(x / xit),
+				yJumps = ~~Math.abs(y / yit),
+				xJump = 0,
+				yJump = 0;
+			window.scrollBy(x % xit, y % yit);
+			function frame(){
+				if(xJump < xJumps || yJump < yJumps) requestAnimationFrame(frame);
+				window.scrollBy(xJump++ < xJumps ? xit : 0, yJump++ < yJumps ? yit : 0)
+			}
+			frame();
+		}
+		function scrollToAnchor(id){
+			smoothScrollBy(0,document.getElementById(id).getBoundingClientRect().top);
+			history.pushState({},document.title,window.location.href.split('#')[0] + '#' + id);
+		}
+		window.addEventListener('scroll',function(e){
+			if(window.scrollY == 0 && window.frozen){
+				startGravity();
+				planet.element.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204.61 204.61"><title>phene.co</title><defs><style>.cls-1{fill:none;stroke:#A9C8F4;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}</style></defs><path class="cls-1" d="M172.88,76.6a75,75,0,1,0-17.35,78.94A74.69,74.69,0,0,0,172.88,76.6Z" transform="translate(-0.2 -0.2)"/><path class="cls-1" d="M128.4,32.12c29-19.5,53.17-27.32,62.48-18s1.49,33.53-18,62.48C161.74,93.15,146.78,111.26,129,129S93.15,161.74,76.6,172.88c-29,19.5-53.17,27.32-62.48,18s-1.49-33.53,18-62.48" transform="translate(-0.2 -0.2)"/></svg>';
+			}else{
+				stopGravity();
+				planet.element.innerHTML = '<svg style="position:absolute;top:-15px;left:9px;width:84px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 270"><title>phene.co</title><defs><style>.cls-1,.cls-2{fill:none;stroke:#A9C8F4;stroke-miterlimit:10;stroke-width:20px;}.cls-2{stroke-linecap:round;}</style></defs><circle class="cls-1" cx="85" cy="135" r="75"/><line class="cls-2" x1="85" y1="10" x2="85" y2="260"/></svg>';
+			}
+			var secs = document.getElementsByClassName('section'),r;
+			for(var i = 0; i < secs.length; i++) moons[i].element.className = 'moon' + (((r = secs[i].getBoundingClientRect()).top <= 0 && r.height + r.top > 0 && window.scrollY > 0) ? ' current' : '');
+		});
+
+		if(window.location.hash == "#test")
+		document.addEventListener('mousedown',function(e){
+			window.moonWrap = document.createElement('a');
+			window.moon	= document.createElement('div');
+			var nav		= document.getElementById('nav'),
+				r		= nav.getBoundingClientRect();
+			moon.style.left	= (e.pageX - r.left - 14) + 'px';
+			moon.style.top	= (e.pageY - r.top - 14) + 'px';
+			moon.x0			= e.pageX;
+			moon.y0			= e.pageY;
+			moon.className	= 'moon';
+			moon.innerHTML	= '<div></div>';
+			moonWrap.appendChild(moon);
+			nav.appendChild(moonWrap);
+			window.liftup = function(e){
+				var nav	= document.getElementById('nav'),
+					r	= nav.getBoundingClientRect(),
+					dy	= moon.y0 - e.pageY,
+					dx	= moon.x0 - e.pageX,
+					vel = Math.sqrt(Math.pow(dy,2) + Math.pow(dx,2)) * 2,
+					dir = Math.atan((dy) / (dx)) - ((dy < 0 && dx < 0) || (dy > 0 && dx < 0)?Math.PI:0);
+				moon.setAttribute('mass',100);
+				moon.setAttribute('velocity',vel);
+				moon.setAttribute('direction',dir);
+				moons[moons.length] = makeMoon(moon);
+				document.removeEventListener('mouseup',liftup);
+			}
+			document.addEventListener('mouseup',liftup);
+		});
+	</script>
+</body>
+</html>

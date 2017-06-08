@@ -1,0 +1,24 @@
+*						{margin:0px;zoom:1;outline:0;border:0;}
+html					{color:#A9C8F4;background:#333;font-family:'Roboto',sans-serif;font-size:14pt;overflow-y:scroll;}
+a						{cursor:pointer;text-decoration:none;box-shadow: inset 0 -3px 0 #A9C8F4;color:#A9C8F4 !important;}
+p						{text-align:justify;}
+h1						{font-family:'Roboto',sans-serif;font-weight:900;font-size:28pt;font-style:italic;}
+
+#map					{position:fixed !important;}
+.gmnoprint div,.gmnoprint a,.gmnoprint span,.gm-style-cc,.gm-style-cc div,a[href^="http://maps.google.com/maps"],a[href^="https://maps.google.com/maps"],a[title="Report errors in the road map or imagery to Google"]{color:#A9C8F4 !important;background:none !important;box-shadow:none;}
+
+#nav					{position:fixed;top:calc(50vh - 184px);left:calc(50vw - 350px);height:368px;transition:left 1.0s;z-index:100;}
+	#planet				{position:absolute;width:102px;height:102px;}
+	.moon				{position:absolute;width:28px;height:28px;}
+	.moon div			{position:absolute;width:10px;height:10px;border:9px solid #A9C8F4;border-radius:50%;cursor:pointer;transition:margin 0.1s,width 0.1s,height 0.1s;}
+	.moon.current div	{margin:5px;width:0px;height:0px;}
+	.arrow				{height:1px;width:27px;background:red;position:fixed;border-left:3px solid black;transform-origin:0% 0%;}
+	.arrow:nth-child(2)	{background:lime;}
+	.info				{position:absolute;left:33px;top:33px;width:100px;color:#A9C8F4;font-size:10pt;font-family:sans-serif;}
+
+#content				{position:absolute;left:0;top:0;width:100%;}
+	.section			{position:relative;min-height:100vh;width:100%;}
+	.section .content	{position:relative;width:700px;margin-left:calc(50vw - 350px);transition:margin 1.0s;z-index:50;}
+	#title				{position:absolute;left:300px;top:calc(50vh - 60px);width:400px;height:120px;}
+	
+/* colors: #333333, #A9C8F4 */
