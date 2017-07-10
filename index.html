@@ -7,8 +7,8 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,900,900i" rel="stylesheet">
 </head>
 <body>
-	<div id="nav">
-		<a href="http://phene.co"><div
+<div id="nav">
+		<a href="https://phene.co"><div
 			style="left:0px;top:133px;"
 			id="planet"
 			mass="1e3"
@@ -194,43 +194,19 @@
 		window.addEventListener('scroll',function(e){
 			if(window.scrollY == 0 && window.frozen){
 				startGravity();
-				planet.element.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204.61 204.61"><title>phene.co</title><defs><style>.cls-1{fill:none;stroke:#A9C8F4;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}</style></defs><path class="cls-1" d="M172.88,76.6a75,75,0,1,0-17.35,78.94A74.69,74.69,0,0,0,172.88,76.6Z" transform="translate(-0.2 -0.2)"/><path class="cls-1" d="M128.4,32.12c29-19.5,53.17-27.32,62.48-18s1.49,33.53-18,62.48C161.74,93.15,146.78,111.26,129,129S93.15,161.74,76.6,172.88c-29,19.5-53.17,27.32-62.48,18s-1.49-33.53,18-62.48" transform="translate(-0.2 -0.2)"/></svg>';
+				planet.element.innerHTML = '<iframe style="border:0;width:102px;height:135px;top:-16px;position:absolute;left:0;" src="assets/phi-to-planet-blue.html" allowtransparency="true"></iframe>'
+				setTimeout(()=>{
+					planet.element.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204.61 204.61"><title>phene.co</title><defs><style>.cls-1{fill:none;stroke:#A9C8F4;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}</style></defs><path class="cls-1" d="M172.88,76.6a75,75,0,1,0-17.35,78.94A74.69,74.69,0,0,0,172.88,76.6Z" transform="translate(-0.2 -0.2)"/><path class="cls-1" d="M128.4,32.12c29-19.5,53.17-27.32,62.48-18s1.49,33.53-18,62.48C161.74,93.15,146.78,111.26,129,129S93.15,161.74,76.6,172.88c-29,19.5-53.17,27.32-62.48,18s-1.49-33.53,18-62.48" transform="translate(-0.2 -0.2)"/></svg>';
+				},(30/24)*1e3);
 			}else{
 				stopGravity();
-				planet.element.innerHTML = '<svg style="position:absolute;top:-15px;left:9px;width:84px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 270"><title>phene.co</title><defs><style>.cls-1,.cls-2{fill:none;stroke:#A9C8F4;stroke-miterlimit:10;stroke-width:20px;}.cls-2{stroke-linecap:round;}</style></defs><circle class="cls-1" cx="85" cy="135" r="75"/><line class="cls-2" x1="85" y1="10" x2="85" y2="260"/></svg>';
+				planet.element.innerHTML = '<iframe style="border:0;width:102px;height:135px;top:-16px;position:absolute;left:0;" src="assets/planet-to-phi-blue.html" allowtransparency="true"></iframe>'
+				setTimeout(()=>{
+					planet.element.innerHTML = '<svg style="position:absolute;top:-15px;left:9px;width:84px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 270"><title>phene.co</title><defs><style>.cls-1,.cls-2{fill:none;stroke:#A9C8F4;stroke-miterlimit:10;stroke-width:20px;}.cls-2{stroke-linecap:round;}</style></defs><circle class="cls-1" cx="85" cy="135" r="75"/><line class="cls-2" x1="85" y1="10" x2="85" y2="260"/></svg>';
+				},(30/24)*1e3);
 			}
 			var secs = document.getElementsByClassName('section'),r;
 			for(var i = 0; i < secs.length; i++) moons[i].element.className = 'moon' + (((r = secs[i].getBoundingClientRect()).top <= 0 && r.height + r.top > 0 && window.scrollY > 0) ? ' current' : '');
-		});
-
-		if(window.location.hash == "#test")
-		document.addEventListener('mousedown',function(e){
-			window.moonWrap = document.createElement('a');
-			window.moon	= document.createElement('div');
-			var nav		= document.getElementById('nav'),
-				r		= nav.getBoundingClientRect();
-			moon.style.left	= (e.pageX - r.left - 14) + 'px';
-			moon.style.top	= (e.pageY - r.top - 14) + 'px';
-			moon.x0			= e.pageX;
-			moon.y0			= e.pageY;
-			moon.className	= 'moon';
-			moon.innerHTML	= '<div></div>';
-			moonWrap.appendChild(moon);
-			nav.appendChild(moonWrap);
-			window.liftup = function(e){
-				var nav	= document.getElementById('nav'),
-					r	= nav.getBoundingClientRect(),
-					dy	= moon.y0 - e.pageY,
-					dx	= moon.x0 - e.pageX,
-					vel = Math.sqrt(Math.pow(dy,2) + Math.pow(dx,2)) * 2,
-					dir = Math.atan((dy) / (dx)) - ((dy < 0 && dx < 0) || (dy > 0 && dx < 0)?Math.PI:0);
-				moon.setAttribute('mass',100);
-				moon.setAttribute('velocity',vel);
-				moon.setAttribute('direction',dir);
-				moons[moons.length] = makeMoon(moon);
-				document.removeEventListener('mouseup',liftup);
-			}
-			document.addEventListener('mouseup',liftup);
 		});
 	</script>
 </body>
